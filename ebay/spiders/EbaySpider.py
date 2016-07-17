@@ -44,8 +44,6 @@ class EbaySpider(CrawlSpider):
                 item['name'] = res.xpath('h3/a/text()').extract()[0]
                 item['price_unit'] = res.xpath('ul/li[@class="lvprice prc"]/span/b/text()').extract()[0]
                 item['price'] = filter(lambda x: x, res.xpath('ul/li[@class="lvprice prc"]/span/text()').re('\S*'))[0]
-                item['create_date'] = res.xpath('ul[@class="lvdetails left '
-                                                'space-zero full-width"]/li/span/span/text()').extract()[0]
             except IndexError:
                 pass
 
@@ -61,6 +59,9 @@ class EbaySpider(CrawlSpider):
         ship_info = response.xpath(
                 '//span[@id="fshippingCost"]/span/text()'
             ).extract()
+        date = response.xpath('//span[@id="bb_tlft"]/text()').extract()[0]
+        time = response.xpath('//span[@id="bb_tlft"]//span[@class="timeMs"]').extract()[0].split()[-1]
+        item['create_date'] = date + time
         try:
             item['shipping_unit'], item['shipping_price'] = ship_info[0].split()
             item['seller'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/span/text()').extract()[0]
