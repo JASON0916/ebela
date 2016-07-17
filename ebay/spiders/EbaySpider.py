@@ -17,10 +17,11 @@ URL_TEMPLATE = 'http://www.ebay.com/sch/{section}/{section_id}/i.html?' \
                '&_pppn=r1' \
                '&scp=ce0&_ipg=200'
 
-PATH = '/'.join(os.path.abspath('EbaySpider.py').split('/')[:-3])
+PATH = '/'.join(os.path.abspath(__file__).split('/')[:-3])
 YAML_PATH = os.path.join(PATH, 'spider_target.yaml')
 
-def get_start_urls(path=PATH):
+
+def get_start_urls(path=YAML_PATH):
     yaml_content = yaml.load(open(path, 'rb'))
     val = [section[:] + [location] for section in yaml_content.get('section')
            for location in yaml_content.get('location')]
