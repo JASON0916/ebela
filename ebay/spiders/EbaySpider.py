@@ -39,11 +39,11 @@ class EbaySpider(CrawlSpider):
         for res in response.xpath('//w-root//ul[@id="ListViewInner"]/li'):
             item = EbayProduct()
             try:
-                item['href'] = res.xpath('h3/a/@href').extract()[0]
+                item['href'] = res.xpath('//h3[@class="lvtitle"]/a/@href').extract()[0]
                 item['price_unit'] = res.xpath('//span[@class="bold bidsold"]/b/text()').extract()[0]
                 item['price'] = filter(lambda x: x, res.xpath('//span[@class="bold bidsold"]/text()').re('\S*'))[0]
-                item['picture'] = res.xpath('div/div[@class="lvpicinner full-width picW"]//img/@src').extract()[0]
-                item['name'] = res.xpath('h3/a/text()').extract()[0]
+                item['picture'] = res.xpath('//div[@class="lvpicinner full-width picW"]//img/@src').extract()[0]
+                item['name'] = res.xpath('//h3[@class="lvtitle"]/a/text()').extract()[0]
             except IndexError:
                 pass
 
