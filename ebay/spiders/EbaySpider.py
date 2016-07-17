@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import os
 import yaml
 from scrapy.spiders import CrawlSpider
 from scrapy import Request
@@ -16,8 +17,10 @@ URL_TEMPLATE = 'http://www.ebay.com/sch/{section}/{section_id}/i.html?' \
                '&_pppn=r1' \
                '&scp=ce0&_ipg=200'
 
+PATH = '/'.join(os.path.abspath('EbaySpider.py').split('/')[:-3])
 
-def get_start_urls(path='../../spider_target.yaml'):
+
+def get_start_urls(path=PATH):
     yaml_content = yaml.load(open(path, 'rb'))
     val = [section[:] + [location] for section in yaml_content.get('section')
            for location in yaml_content.get('location')]
