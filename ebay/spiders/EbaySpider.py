@@ -56,14 +56,15 @@ class EbaySpider(CrawlSpider):
 
     def parse_detail(self, response):
         item = response.meta['item']
-        ship_info = response.xpath(
-                '//span[@id="fshippingCost"]/span/text()'
-            ).extract()
+        ship_info = response.xpath('//span[@id="fshippingCost"]/span/text()').extract()
+        price_info = response.xpath('//span[@id="convbidPrice"]/text()').extract()
         date = response.xpath('//span[@id="bb_tlft"]/text()').extract()[0]
         time = response.xpath('//span[@id="bb_tlft"]//span[@class="timeMs"]').extract()[0].split()[-1]
         item['create_date'] = date + time
+
         try:
             item['shipping_unit'], item['shipping_price'] = ship_info[0].split()
+            item['price_unit'], item['price'] = price_info[0].split()
             item['seller'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/span/text()').extract()[0]
             item['seller_href'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/@href').extract()[0]
         except (ValueError, IndentationError, IndexError):
