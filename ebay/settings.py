@@ -125,4 +125,5 @@ USER_AGENT_LIST = [
 ]
 
 POSTGRE_URL = 'postgresql+psycopg2://openerp:openerp@localhost:5432/openerp'
+# POSTGRE_URL = 'sqlite:///test.db'
 REDIRECT_MAX_TIMES = 3

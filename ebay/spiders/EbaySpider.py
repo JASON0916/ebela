@@ -15,7 +15,8 @@ URL_TEMPLATE = 'http://www.ebay.com/sch/{section}/{section_id}/i.html?' \
                '&LH_Complete=1' \
                '&LH_LocatedIn={location}' \
                '&_pppn=r1' \
-               '&scp=ce0&_ipg=200'
+               '&scp=ce0&_ipg=200' \
+               '&rt=nc'
 
 PATH = '/'.join(os.path.abspath(__file__).split('/')[:-3])
 YAML_PATH = os.path.join(PATH, 'spider_target.yaml')
