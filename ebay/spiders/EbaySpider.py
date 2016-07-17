@@ -37,13 +37,17 @@ class EbaySpider(CrawlSpider):
     def parse(self, response):
         for res in response.xpath('//w-root//ul[@id="ListViewInner"]/li'):
             item = EbayProduct()
-            item['href'] = res.xpath('h3/a/@href').extract()[0]
-            item['picture'] = res.xpath('div/div[@class="lvpicinner full-width picW"]//img/@src').extract()[0]
-            item['name'] = res.xpath('h3/a/text()').extract()[0]
-            item['price_unit'] = res.xpath('ul/li[@class="lvprice prc"]/span/b/text()').extract()[0]
-            item['price'] = filter(lambda x: x, res.xpath('ul/li[@class="lvprice prc"]/span/text()').re('\S*'))[0]
-            item['create_date'] = res.xpath('ul[@class="lvdetails left '
-                                            'space-zero full-width"]/li/span/span/text()').extract()[0]
+            try:
+                item['href'] = res.xpath('h3/a/@href').extract()[0]
+                item['picture'] = res.xpath('div/div[@class="lvpicinner full-width picW"]//img/@src').extract()[0]
+                item['name'] = res.xpath('h3/a/text()').extract()[0]
+                item['price_unit'] = res.xpath('ul/li[@class="lvprice prc"]/span/b/text()').extract()[0]
+                item['price'] = filter(lambda x: x, res.xpath('ul/li[@class="lvprice prc"]/span/text()').re('\S*'))[0]
+                item['create_date'] = res.xpath('ul[@class="lvdetails left '
+                                                'space-zero full-width"]/li/span/span/text()').extract()[0]
+            except IndexError:
+                pass
+
             request = Request(item['href'],
                               callback=self.parse_detail,
                               errback=self.error_handle,
@@ -58,11 +62,13 @@ class EbaySpider(CrawlSpider):
             ).extract()
         try:
             item['shipping_unit'], item['shipping_price'] = ship_info[0].split()
-        except ValueError, IndentationError:
+            item['seller'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/span/text()').extract()[0]
+            item['seller_href'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/@href').extract()[0]
+        except (ValueError, IndentationError, IndexError):
             item['shipping_unit'] = ''
             item['shipping_price'] = 0.0
-        item['seller'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/span/text()').extract()[0]
-        item['seller_href'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/@href').extract()[0]
+            item['seller'] = ''
+            item['seller_href'] = ''
         return item
 
     def error_handle(self, failure):
