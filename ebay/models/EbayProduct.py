@@ -15,7 +15,7 @@ class EbayProduct(meta):
     __tablename__ = 'ebay_product'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
-    name = Column(String(50), nullable=False)
+    name = Column(String(100), nullable=False)
     picture = Column(String(100))
     create_date = Column(String, nullable=False)
     price = Column(Float)
