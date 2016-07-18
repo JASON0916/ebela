@@ -60,6 +60,8 @@ class EbaySpider(CrawlSpider):
 
         try:
             item['price_unit'], item['price'] = price_info[0].split()
+            if not item['price'][0].isdigit():
+                item['price'] = item['price'][1:]
             item['shipping_unit'], item['shipping_price'] = ship_info[0].split()
             item['seller'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/span/text()').extract()[0]
             item['seller_href'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/@href').extract()[0]
