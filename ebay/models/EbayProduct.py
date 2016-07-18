@@ -16,15 +16,15 @@ class EbayProduct(meta):
 
     id = Column(Integer, autoincrement=True, primary_key=True)
     name = Column(String(100), nullable=False)
-    picture = Column(String(100))
+    picture = Column(String(200))
     create_date = Column(String, nullable=False)
     price = Column(Float)
     price_unit = Column(String(10))
     seller = Column(String(50))
-    seller_href = Column(String(100))
+    seller_href = Column(String(200))
     shipping_price = Column(Float)
     shipping_unit = Column(String(10))
-    href = Column(String(100))
+    href = Column(String(200))
     created_at = Column(DateTime, default=datetime.datetime.now,
                         onupdate=datetime.datetime.now)
 
