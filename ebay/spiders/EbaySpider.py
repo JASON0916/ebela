@@ -2,7 +2,8 @@
 
 import os
 import yaml
-from scrapy.spiders import CrawlSpider
+from scrapy.spiders import CrawlSpider, Rule
+from scrapy.linkextractors import LinkExtractor
 from scrapy import Request
 from scrapy.spidermiddlewares.httperror import HttpError
 from twisted.internet.error import DNSLookupError
@@ -30,47 +31,59 @@ def get_start_urls(path=YAML_PATH):
     return list(set(URL_TEMPLATE.format(**data) for data in url_map))
 
 
+def get_res(res):
+    try:
+        return res[0]
+    except IndexError as exc:
+        return None
+
+
+def parse_price(price):
+    if not price[0].isdigit():
+        return price[1:]
+    else:
+        return price
+
+
 class EbaySpider(CrawlSpider):
     name = "ebay"
-    allowed_domains = ["http://www.ebay.com"]
     start_urls = get_start_urls()
 
+    # rules = (
+    #     Rule(
+    #         LinkExtractor(
+    #             restrict_xpaths='//w-root//ul[@id="ListViewInner"]/li//h3[@class="lvtitle"]/a'
+    #         ),
+    #         follow=True,
+    #         callback='parse_detail'
+    #     ),
+    # )
     def parse(self, response):
-        for res in response.xpath('//w-root//ul[@id="ListViewInner"]/li'):
-            item = EbayProduct()
-            try:
-                item['picture'] = res.xpath('//div[@class="lvpicinner full-width picW"]//img/@src').extract()[0]
-                item['name'] = res.xpath('//h3[@class="lvtitle"]/a/text()').extract()[0]
-                item['href'] = res.xpath('//h3[@class="lvtitle"]/a/@href').extract()[0]
-            except IndexError:
-                pass
-
-            request = Request(item['href'],
-                              callback=self.parse_detail,
-                              errback=self.error_handle,
-                              dont_filter=True)
-            request.meta['item'] = item
-            yield request
+        for url in response.xpath('//w-root//ul[@id="ListViewInner"]'
+                                  '/li//h3[@class="lvtitle"]/a/@href').extract():
+            yield Request(url, callback=self.parse_detail, errback=self.error_handle)
 
     def parse_detail(self, response):
-        item = response.meta['item']
+        item = EbayProduct()
+        item['name'] = response.xpath('//h1[@itemprop="name"]/text()').extract()
+        item['href'] = response.url
+        item['picture'] = get_res(response.xpath('//img[@itemprop="image"]/@src').extract())
         price_info = response.xpath('//span[@id="prcIsum"]/text()').extract()
         ship_info = response.xpath('//span[@id="fshippingCost"]/span/text()').extract()
-        item['create_date'] = response.xpath('//span[@id="bb_tlft"]/text()').extract()[0].strip()
+        item['create_date'] = get_res(response.xpath('//span[@id="bb_tlft"]/text()').extract())
+        if item['create_date']:
+            item['create_date'] = item['create_date'].strip()
 
         try:
-            item['price_unit'], item['price'] = price_info[0].split()
-            if not item['price'][0].isdigit():
-                item['price'] = item['price'][1:]
-            item['shipping_unit'], item['shipping_price'] = ship_info[0].split()
-            item['seller'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/span/text()').extract()[0]
-            item['seller_href'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/@href').extract()[0]
-        except (ValueError, IndentationError, IndexError):
-            item['shipping_unit'] = ''
-            item['shipping_price'] = 0.0
-            item['seller'] = ''
-            item['seller_href'] = ''
-        return item
+            item['price_unit'], item['price'] = get_res(price_info).split()
+            item['price'] = parse_price(item['price'])
+            item['shipping_unit'], item['shipping_price'] = get_res(ship_info).split()
+            item['shipping_price'] = parse_price(item['shipping_price'])
+            item['seller'] = get_res(response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/span/text()').extract())
+            item['seller_href'] = get_res(response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/@href').extract())
+        except Exception:
+            pass
+        yield item
 
     def error_handle(self, failure):
         self.logger.error(repr(failure))
