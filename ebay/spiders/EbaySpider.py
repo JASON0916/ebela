@@ -39,11 +39,9 @@ class EbaySpider(CrawlSpider):
         for res in response.xpath('//w-root//ul[@id="ListViewInner"]/li'):
             item = EbayProduct()
             try:
-                item['href'] = res.xpath('//h3[@class="lvtitle"]/a/@href').extract()[0]
-                item['price_unit'] = res.xpath('//span[@class="bold bidsold"]/b/text()').extract()[0]
-                item['price'] = filter(lambda x: x, res.xpath('//span[@class="bold bidsold"]/text()').re('\S*'))[0]
                 item['picture'] = res.xpath('//div[@class="lvpicinner full-width picW"]//img/@src').extract()[0]
                 item['name'] = res.xpath('//h3[@class="lvtitle"]/a/text()').extract()[0]
+                item['href'] = res.xpath('//h3[@class="lvtitle"]/a/@href').extract()[0]
             except IndexError:
                 pass
 
@@ -56,10 +54,12 @@ class EbaySpider(CrawlSpider):
 
     def parse_detail(self, response):
         item = response.meta['item']
+        price_info = response.xpath('//span[@id="prcIsum"]/text()').extract()
         ship_info = response.xpath('//span[@id="fshippingCost"]/span/text()').extract()
-        item['create_date'] = response.xpath('//span[@id="bb_tlft"]/text()').extract()[0]
+        item['create_date'] = response.xpath('//span[@id="bb_tlft"]/text()').extract()[0].strip()
 
         try:
+            item['price_unit'], item['price'] = price_info[0].split()
             item['shipping_unit'], item['shipping_price'] = ship_info[0].split()
             item['seller'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/span/text()').extract()[0]
             item['seller_href'] = response.xpath('//div[@class="mbg vi-VR-margBtm3"]/a/@href').extract()[0]
