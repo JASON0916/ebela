@@ -29,6 +29,7 @@ class Pipeline(object):
         try:
             self.session.add(data)
             self.session.commit()
+            logging.info('add data {}'.format(data))
         except (SQLAlchemyError, Exception) as exc:
             logging.error(exc.message)
             self.session.rollback()
