@@ -23,7 +23,7 @@ class Pipeline(object):
                                shipping_price=item['shipping_price'],
                                shipping_unit=item['shipping_unit'],
                                href=item['href'])
-        except IndexError:
+        except KeyError:
             raise DropItem
 
         try:
