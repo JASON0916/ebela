@@ -2,7 +2,6 @@ import logging
 from ebay.models.EbayProduct import EbayProduct
 from ebay.models import DBSession
 from sqlalchemy.exc import SQLAlchemyError
-from scrapy.exceptions import DropItem
 
 
 class Pipeline(object):
@@ -12,19 +11,16 @@ class Pipeline(object):
         self.session = DBSession()
 
     def process_item(self, item, spider):
-        try:
-            data = EbayProduct(name=item['name'],
-                               picture=item['picture'],
-                               create_date=item['create_date'],
-                               price=item['price'],
-                               price_unit=item['price_unit'],
-                               seller=item['seller'],
-                               seller_href=item['seller_href'],
-                               shipping_price=item['shipping_price'],
-                               shipping_unit=item['shipping_unit'],
-                               href=item['href'])
-        except KeyError:
-            raise DropItem
+        data = EbayProduct(name=item['name'],
+                           picture=item['picture'],
+                           create_date=item['create_date'],
+                           price=item['price'],
+                           price_unit=item['price_unit'],
+                           seller=item['seller'],
+                           seller_href=item['seller_href'],
+                           shipping_price=item['shipping_price'],
+                           shipping_unit=item['shipping_unit'],
+                           href=item['href'])
 
         try:
             self.session.add(data)
@@ -32,7 +28,6 @@ class Pipeline(object):
         except (SQLAlchemyError, Exception) as exc:
             logging.error(exc.message)
             self.session.rollback()
-            raise DropItem
 
     def close_spider(self, spider):
         self.session.close()
