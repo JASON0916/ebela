@@ -4,22 +4,22 @@ import datetime
 from sqlalchemy import (Table, Column, Integer,
                         String, Float, DateTime,
                         MetaData, UniqueConstraint, Index)
-from ebay.models import POSTGRE_ENGINE
+from ebay_spider.models import POSTGRE_ENGINE
 
 meta = MetaData()
 
 EbayProduct = Table('ebay_product', meta,
                     Column('id', Integer, autoincrement=True, primary_key=True),
-                    Column('name', String(100), nullable=False),
-                    Column('picture', String(200)),
-                    Column('create_date', String, nullable=False),
-                    Column('price', Float),
-                    Column('price_unit', String(10)),
-                    Column('seller', String(50)),
-                    Column('seller_href', String(200)),
-                    Column('shipping_price', Float),
-                    Column('shipping_unit', String(10)),
-                    Column('href', String(200)),
+                    Column('name', String(100), nullable=False, default=''),
+                    Column('picture', String(200), default=''),
+                    Column('create_date', String, nullable=False, default=''),
+                    Column('price', Float, default=0.0),
+                    Column('price_unit', String(10), default=''),
+                    Column('seller', String(50), default=''),
+                    Column('seller_href', String(200), default=''),
+                    Column('shipping_price', Float, default=0.0),
+                    Column('shipping_unit', String(10), default=''),
+                    Column('href', String(200), default=''),
                     Column('created_at', DateTime,
                            default=datetime.datetime.now,
                            onupdate=datetime.datetime.now),

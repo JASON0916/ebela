@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
+from models import DBSession
 from sqlalchemy import Column, String, Integer, DateTime, Float
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 
@@ -25,3 +26,14 @@ class EbayProduct(meta):
     href = Column(String(200), default='')
     created_at = Column(DateTime, default=datetime.datetime.now,
                         onupdate=datetime.datetime.now)
+
+    @classmethod
+    def get(cls, name='', seller='', datetime=''):
+        query = DBSession().query(cls)
+        if name:
+            query = query.filter(cls.name == name)
+        if seller:
+            query = query.filter(cls.seller == seller)
+        if datetime:
+            query = query.filter(cls.create_date < datetime)
+        return query.all()
