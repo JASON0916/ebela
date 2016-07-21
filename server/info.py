@@ -21,7 +21,7 @@ LOGGER = getLogger(__file__)
 })
 def get_products_info(args):
     try:
-        row2dict = lambda r: {c.name: str(getattr(r, c.name)) for c in r.__table__.columns}
+        row2dict = lambda r: {c.name: getattr(r, c.name) for c in r.__table__.columns}
         data = map(row2dict, EbayProduct.get(**args))
         return Response(ujson.dumps(data))
     except Exception as exc:
