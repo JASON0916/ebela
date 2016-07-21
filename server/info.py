@@ -1,6 +1,6 @@
 #!/usr/bin/env python                                                                                                                                                
 # -*- coding: utf-8 -*-
-import json
+import ujson
 from flask import (Response,
                    abort,
                    Blueprint)
@@ -17,13 +17,13 @@ LOGGER = getLogger(__file__)
 @use_args({
     'name': fields.Str(allow_missing=True),
     'seller': fields.Str(allow_missing=True),
-    'datetime': fields.Str(required=True)
+    'date': fields.Str(required=True)
 })
 def get_products_info(args):
     try:
         row2dict = lambda r: {c.name: getattr(r, c.name) for c in r.__table__.columns}
         data = map(row2dict, EbayProduct.get(**args))
-        return Response(json.dumps(data))
+        return Response(ujson.dumps(data))
     except Exception as exc:
         LOGGER.exception(exc)
         abort(500)
@@ -34,4 +34,4 @@ def ping():
     msg = {
         'SUCCESS': True,
     }
-    return Response(json.dumps(msg))
+    return Response(ujson.dumps(msg))

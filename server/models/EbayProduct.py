@@ -27,16 +27,15 @@ class EbayProduct(meta):
     created_at = Column(DateTime, default=datetime.datetime.now,
                         onupdate=datetime.datetime.now)
 
-    def as_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
     @classmethod
-    def get(cls, name='', seller='', datetime=''):
+    def get(cls, name='', seller='', date=''):
         query = DBSession().query(cls)
         if name:
             query = query.filter(cls.name == name)
         if seller:
             query = query.filter(cls.seller == seller)
-        if datetime:
-            query = query.filter(cls.created_at < datetime)
+        if date:
+            today = datetime.datetime.strptime(date, '%Y-%m-%d')
+            yesterday = (today - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
+            query = query.filter(cls.created_at.between(yesterday, today))
         return query.all()
