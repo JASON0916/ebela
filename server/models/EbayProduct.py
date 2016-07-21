@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-from models import DBSession
+from server.models import DBSession
 from sqlalchemy import Column, String, Integer, DateTime, Float
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 

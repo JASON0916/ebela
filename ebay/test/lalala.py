@@ -1,11 +1,9 @@
 #!/usr/bin/env python                                                                                                                                                
 # -*- coding: utf-8 -*-
 
-from flask import Blueprint, render_template, abort, Flask
+from ebay.test import simple_page
 from jinja2 import TemplateNotFound
-
-simple_page = Blueprint('simple_page', __name__,
-                        template_folder='templates')
+from flask import abort, render_template
 
 
 @simple_page.route('/', defaults={'page': 'index'})
@@ -15,7 +13,3 @@ def show(page):
         return render_template('pages/%s.html' % page)
     except TemplateNotFound:
         abort(404)
-
-app = Flask(__name__)
-app.register_blueprint(simple_page)
-print app.url_map

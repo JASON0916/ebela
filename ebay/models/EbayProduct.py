@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import datetime
-from ebay_spider.models import DBSession
+from ebay.models import DBSession
 from sqlalchemy import Column, String, Integer, DateTime, Float
 from sqlalchemy.ext.declarative import declarative_base, DeclarativeMeta
 

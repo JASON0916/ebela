@@ -4,7 +4,7 @@ import datetime
 from sqlalchemy import (Table, Column, Integer,
                         String, Float, DateTime,
                         MetaData, UniqueConstraint, Index)
-from ebay_spider.models import POSTGRE_ENGINE
+from ebay.models import POSTGRE_ENGINE
 
 meta = MetaData()
 

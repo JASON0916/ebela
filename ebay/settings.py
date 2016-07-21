@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Scrapy settings for ebay_spider project
+# Scrapy settings for ebay project
 #
 # For simplicity, this file contains only settings considered important or
 # commonly used. You can find more settings consulting the documentation:
@@ -10,10 +10,10 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
 
-BOT_NAME = 'ebay_spider'
+BOT_NAME = 'ebay'
 
-SPIDER_MODULES = ['ebay_spider.spiders']
-NEWSPIDER_MODULE = 'ebay_spider.spiders'
+SPIDER_MODULES = ['ebay.spiders']
+NEWSPIDER_MODULE = 'ebay.spiders'
 
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
@@ -47,7 +47,7 @@ DEFAULT_REQUEST_HEADERS = {
 # Enable or disable spider middlewares
 # See http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 #SPIDER_MIDDLEWARES = {
-#    'ebay_spider.middlewares.MyCustomSpiderMiddleware': 543,
+#    'ebay.middlewares.MyCustomSpiderMiddleware': 543,
 #}
 
 # Enable or disable downloader middlewares
@@ -59,7 +59,7 @@ DOWNLOADER_MIDDLEWARES = {
         350,
     'scrapy.downloadermiddlewares.useragent.UserAgentMiddleware': None,
 
-    'ebay_spider.middlewares.random_user_agent.RandomUserAgentMiddleware': 400,
+    'ebay.middlewares.random_user_agent.RandomUserAgentMiddleware': 400,
     'scrapy.downloadermiddlewares.retry.RetryMiddleware': None,
     'scrapy.downloadermiddlewares.defaultheaders.DefaultHeadersMiddleware': 550,
     'scrapy.downloadermiddlewares.cookies.CookiesMiddleware': 700,
@@ -81,7 +81,7 @@ DOWNLOADER_MIDDLEWARES = {
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
-   'ebay_spider.pipelines.Pipeline': 300,
+   'ebay.pipelines.Pipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

@@ -1,6 +1,6 @@
 import logging
-from ebay_spider.models.EbayProduct import EbayProduct
-from ebay_spider.models import DBSession
+from ebay.models.EbayProduct import EbayProduct
+from ebay.models import DBSession
 from sqlalchemy.exc import SQLAlchemyError
 from scrapy.exceptions import DropItem
 

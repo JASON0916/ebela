@@ -7,10 +7,10 @@ from scrapy import Request
 from scrapy.spidermiddlewares.httperror import HttpError
 from twisted.internet.error import DNSLookupError
 from twisted.internet.error import TimeoutError, TCPTimedOutError
-from ebay_spider.items import EbayProduct
+from ebay.items import EbayProduct
 
 # http://www.ebay.com/sch/Computer-Components-Parts/175673/i.html?LH_Sold=1&LH_Complete=1&LH_LocatedIn=3&_pppn=r1&scp=ce0&_ipg=200
-URL_TEMPLATE = 'http://www.ebay_spider.com/sch/{section}/{section_id}/i.html?' \
+URL_TEMPLATE = 'http://www.ebay.com/sch/{section}/{section_id}/i.html?' \
                'LH_Sold=1' \
                '&LH_Complete=1' \
                '&LH_LocatedIn={location}' \
@@ -45,7 +45,7 @@ def parse_price(price):
 
 
 class EbaySpider(CrawlSpider):
-    name = "ebay_spider"
+    name = "ebay"
     start_urls = get_start_urls()
 
     # rules = (

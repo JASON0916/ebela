@@ -1,6 +1,7 @@
 #!/usr/bin/env python                                                                                                                                                
 # -*- coding: utf-8 -*-
 
+import os
 from flask import (Flask,
                    render_template
                    )
@@ -20,6 +21,6 @@ app = create_app()
 @app.route('/', methods=['GET'])
 def index():
     # return Response(ujson.dumps({'SUCCESS': True}))
-    return render_template('/static/html/index.html')
-
-app.run(debug=True)
+    return render_template(os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                        'static/html/index.html'))
+print app.url_map
