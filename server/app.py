@@ -10,7 +10,7 @@ from spider import SPIDER_API
 
 
 def create_app():
-    app = Flask(__name__)
+    app = Flask(__name__, template_folder='static')
     app.register_blueprint(INFO_API)
     app.register_blueprint(SPIDER_API)
     return app
@@ -21,6 +21,5 @@ app = create_app()
 @app.route('/', methods=['GET'])
 def index():
     # return Response(ujson.dumps({'SUCCESS': True}))
-    return render_template(os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                        'static/html/index.html'))
-print app.url_map
+    return render_template(os.path.join('html/index.html'))
+app.run(debug=True)
