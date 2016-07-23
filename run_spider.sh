@@ -1,2 +1,1 @@
-# cd /root/HongKongStock
-scrapy runspider ebay/spiders/EbaySpider.py
+scrapy runspider /root/ebala/ebay/spiders/EbaySpider.py
