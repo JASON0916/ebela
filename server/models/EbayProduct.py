@@ -28,14 +28,15 @@ class EbayProduct(meta):
                         onupdate=datetime.datetime.now)
 
     @classmethod
-    def get(cls, name='', seller='', date=''):
+    def get(cls, name='', seller='', start_date='', end_date=''):
         query = DBSession().query(cls)
         if name:
             query = query.filter(cls.name == name)
         if seller:
             query = query.filter(cls.seller == seller)
-        if date:
-            today = datetime.datetime.strptime(date, '%Y-%m-%d')
-            yesterday = (today - datetime.timedelta(days=1)).strftime('%Y-%m-%d')
-            query = query.filter(cls.created_at.between(yesterday, today))
+        if start_date and end_date:
+            start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
+            end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
+            query = query.filter(cls.created_at.between(start_date, end_date))
+            print query
         return query.all()

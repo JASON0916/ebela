@@ -72,7 +72,6 @@ class EbaySpider(CrawlSpider):
         item['create_date'] = get_res(response.xpath('//span[@id="bb_tlft"]/text()').extract())
         if item['create_date']:
             item['create_date'] = item['create_date'].strip()
-
         try:
             item['price_unit'], item['price'] = get_res(price_info).split()
             item['price'] = parse_price(item['price'])

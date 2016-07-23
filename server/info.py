@@ -13,11 +13,12 @@ INFO_API = Blueprint('info', __name__, url_prefix='/api/info')
 LOGGER = getLogger(__file__)
 
 
-@INFO_API.route('/products', methods=['GET'])
+@INFO_API.route('/products', methods=['POST'])
 @use_args({
     'name': fields.Str(allow_missing=True),
     'seller': fields.Str(allow_missing=True),
-    'date': fields.Str(required=True)
+    'start_date': fields.Str(required=True),
+    'end_date': fields.Str(required=True)
 })
 def get_products_info(args):
     try:

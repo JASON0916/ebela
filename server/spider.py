@@ -18,7 +18,7 @@ SPIDER_API = Blueprint('spider', __name__, url_prefix='/api/spider')
 LOGGER = getLogger(__file__)
 PROJECT_PATH = '/'.join(os.path.abspath(__file__).split('/')[:-2])
 YAML_PATH = os.path.join(PROJECT_PATH, 'spider_target.yaml')
-SPIDER_SCRIPT = os.path.join(PROJECT_PATH, 'run_spider.sh')
+SPIDER_SCRIPT = os.path.join(PROJECT_PATH, 'ebay/spiders/EbaySpider.py')
 
 
 @SPIDER_API.route('/settings', methods=['POST'])
@@ -46,5 +46,5 @@ def add_spider_param(args):
 
 @SPIDER_API.route('/run', methods=['GET'])
 def run_spider():
-    os.popen('sh {}'.format(SPIDER_SCRIPT))
+    os.system('scrapy runspider {}'.format(SPIDER_SCRIPT))
     return Response(ujson.dumps({'SUCCESS': True}))
