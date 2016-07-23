@@ -31,9 +31,9 @@ class EbayProduct(meta):
     def get(cls, name='', seller='', start_date='', end_date=''):
         query = DBSession().query(cls)
         if name:
-            query = query.filter(cls.name == name)
+            query = query.filter(cls.name.like('%{}%'.format(name)))
         if seller:
-            query = query.filter(cls.seller == seller)
+            query = query.filter(cls.seller.like('%{}%'.format(seller)))
         if start_date and end_date:
             start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
             end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')

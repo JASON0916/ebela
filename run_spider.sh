@@ -1,1 +1,1 @@
-scrapy runspider /root/ebala/ebay/spiders/EbaySpider.py
+scrapy runspider /root/ebela/ebay/spiders/EbaySpider.py

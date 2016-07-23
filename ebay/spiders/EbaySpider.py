@@ -64,7 +64,7 @@ class EbaySpider(CrawlSpider):
 
     def parse_detail(self, response):
         item = EbayProduct()
-        item['name'] = response.xpath('//h1[@itemprop="name"]/text()').extract()
+        item['name'] = get_res(response.xpath('//h1[@itemprop="name"]/text()').extract())
         item['href'] = response.url
         item['picture'] = get_res(response.xpath('//img[@itemprop="image"]/@src').extract())
         price_info = response.xpath('//span[@id="prcIsum"]/text()').extract()

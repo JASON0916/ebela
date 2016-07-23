@@ -31,9 +31,9 @@ class EbayProduct(meta):
     def get(cls, name='', seller='', datetime=''):
         query = DBSession().query(cls)
         if name:
-            query = query.filter(cls.name == name)
+            query = query.filter(cls.name.like('%{}%'.format(name)))
         if seller:
-            query = query.filter(cls.seller == seller)
+            query = query.filter(cls.seller.like('%{}%'.format(seller)))
         if datetime:
             query = query.filter(cls.create_date < datetime)
         return query.all()
