@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import re
 import yaml
 import ujson
 from flask import (
@@ -19,24 +20,20 @@ LOGGER = getLogger(__file__)
 PROJECT_PATH = '/'.join(os.path.abspath(__file__).split('/')[:-2])
 YAML_PATH = os.path.join(PROJECT_PATH, 'spider_target.yaml')
 SPIDER_SCRIPT = os.path.join(PROJECT_PATH, 'ebay/spiders/EbaySpider.py')
+URL_PATTERN = re.compile('sch\/(?P<section>\S*)\/(?P<section_id>\d*)\/i\.html\S*LH_LocatedIn\=(?P<location_code>\d*)')
 
 
 @SPIDER_API.route('/settings', methods=['POST'])
 @use_args({
-    'location_code': fields.Int(required=True),
-    'section': fields.Str(required=True),
-    'section_id': fields.Int(required=True)
+    'url': fields.Str(required=True)
 })
 def add_spider_param(args):
-    location_code = args.get('location_code')
-    section = args.get('section')
-    section_id = args.get('section_id')
+    url = args.get('url')
+    [section, section_id, location_code] = URL_PATTERN.findall(url)[0]
     try:
         data = yaml.load(open(YAML_PATH, 'rb'))
-        print (data)
-        data['location'].append(location_code),
-        data['section'].append([section, section_id])
-        print (data)
+        data['location'].append(int(location_code)),
+        data['section'].append([section, int(section_id)])
         yaml.safe_dump(data, open(YAML_PATH, 'wb'))
         return Response(ujson.dumps({'SUCCESS': True}))
     except Exception as exc:

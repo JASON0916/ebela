@@ -19,9 +19,7 @@ jQuery(document).ready(function($) {
             });
     });
     $('#config_spider').click(function () {
-        var location_code = $('#location').val();
-        var section = $('#section').val();
-        var section_id = $('#section_id').val();
+        var url = $('#section_url').val();
 
         // Ajax POST
         $.ajax({
@@ -30,9 +28,7 @@ jQuery(document).ready(function($) {
             dataType: 'json',
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify({
-            'location_code': location_code,
-            'section': section,
-            'section_id': section_id
+            'url': url
           })
         })
             .done(function (result) {
