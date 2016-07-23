@@ -18,4 +18,30 @@ jQuery(document).ready(function($) {
                 }
             });
     });
+    $('#config_spider').click(function () {
+        var location_code = $('#location').val();
+        var section = $('#section').val();
+        var section_id = $('#section_id').val();
+
+        // Ajax POST
+        $.ajax({
+            url: '/api/spider/settings',
+            type: 'POST',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify({
+            'location_code': location_code,
+            'section': section,
+            'section_id': section_id
+          })
+        })
+            .done(function (result) {
+                if (result['SUCCESS'] === true) {
+                    alert('设定成功')
+                } else {
+                    // buffer for table items
+                    alert('设定失败')
+                }
+            });
+    });
 });
