@@ -20,10 +20,28 @@
       <div class = "row">
       <!-- 查询框 -->
         <div class = "col-md-12">
+          <div class="query-group form-group">
+            <label id="config">现有配置</label>
+            <button type="button" class="btn btn-default" id="get_config">获取配置</button>
+          </div>
+        </div>
+
+        <div class = "col-md-12">
+          <label>删除location:</label>
+          <input type="text" id="del_location"  name="del_location">
+          <label>删除section:</label>
+          <input type="text" id="del_section" name="del_section">
+          <label>删除section_id:</label>
+          <input type="text" id="del_section_id" name="del_section_id">
+            <button type="button" class="btn btn-default" id="del_config">删除配置</button>
+        </div>
+
+        <div class = "col-md-12">
           <label for="section_url">商品分区链接:</label>
             <input type="text" id="section_url"  name="section_url">
               <button type="button" class="btn btn-default" id="config_spider">添加配置</button>
         </div>
+
         <div class = "col-md-12">
           <form class="form-inline">
             <div class="query-group form-group">
@@ -33,8 +51,8 @@
             <div class = "query-group form-group">
               <button type="button" class="btn btn-default" id="run_spider">执行</button>
             </div>
-      </form>
-    </div>
+          </form>
+        </div>
       </div>
     </div>
 

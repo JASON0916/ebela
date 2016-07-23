@@ -6,6 +6,7 @@ import re
 import yaml
 import ujson
 from flask import (
+    request,
     Response,
     abort,
     Blueprint
@@ -27,7 +28,7 @@ URL_PATTERN = re.compile('sch\/(?P<section>\S*)\/(?P<section_id>\d*)\/i\.html\S*
 @use_args({
     'url': fields.Str(required=True)
 })
-def add_spider_param(args):
+def add_spider_config(args):
     url = args.get('url')
     [section, section_id, location_code] = URL_PATTERN.findall(url)[0]
     try:
@@ -36,6 +37,41 @@ def add_spider_param(args):
         data['section'].append([section, int(section_id)])
         yaml.safe_dump(data, open(YAML_PATH, 'wb'))
         return Response(ujson.dumps({'SUCCESS': True}))
+    except Exception as exc:
+        LOGGER.exception(exc)
+        abort(500)
+
+
+@SPIDER_API.route('/settings', methods=['GET'])
+def get_spider_config():
+    try:
+        data = yaml.load(open(YAML_PATH, 'rb'))
+        return Response(ujson.dumps(data))
+    except Exception as exc:
+        LOGGER.exception(exc)
+        abort(500)
+
+
+@SPIDER_API.route('/settings', methods=['DELETE'])
+def del_spider_config():
+    try:
+        args = request.args
+        location = args.get('location', None)
+        section = args.get('section', None)
+        section_id = args.get('section_id', None)
+        data = yaml.load(open(YAML_PATH, 'rb'))
+        if location:
+            data['location'].pop(data['location'].index(int(location)))
+        if section_id or section:
+            index = 0
+            while index < len(data['section']):
+                if section_id in data['section'][index] or section in data['section'][index]:
+                    data['section'].pop(index)
+                    break
+                else:
+                    index += 1
+        yaml.safe_dump(data, open(YAML_PATH, 'wb'))
+        return Response(ujson.dumps(data))
     except Exception as exc:
         LOGGER.exception(exc)
         abort(500)

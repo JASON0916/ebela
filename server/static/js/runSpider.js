@@ -40,4 +40,42 @@ jQuery(document).ready(function($) {
                 }
             });
     });
+    $('#get_config').click(function () {
+        // Ajax POST
+        $.ajax({
+            url: '/api/spider/settings',
+            type: 'GET',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8"
+        }).success(function (data) {
+            $('#config').text(
+                'location: ' + data['location'] +
+                'section: ' + data['section']
+            )
+        })
+    });
+
+    $('#del_config').click(function () {
+        var location = $('#del_location').val();
+        var section = $('#del_section').val();
+        var section_id = $('#del_section_id').val();
+
+        // Ajax POST
+        $.ajax({
+            url: '/api/spider/settings?' + $.param({
+                'section': section,
+                'section_id': section_id,
+                'location': location
+              }),
+            type: 'DELETE',
+            dataType: 'json',
+            contentType: "application/json; charset=utf-8",
+        }).success(function (data) {
+            $('#config').text(
+                'location: ' + data['location'] +
+                'section: ' + data['section']
+            )
+        })
+    });
+
 });
