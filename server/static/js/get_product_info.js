@@ -11,6 +11,7 @@ jQuery(document).ready(function($) {
     var end_date = $('#end-date').val();
     var seller = $('#seller').val();
     var name = $('#name').val();
+    var section = $('#section').val();
     // check if start_date is bigger than end_date
     if(start_date > end_date) {
       alert('起始日期必须小于截至日期');
@@ -26,7 +27,8 @@ jQuery(document).ready(function($) {
         'start_date': start_date,
         'end_date': end_date,
         'seller': seller,
-        'name': name
+        'name': name,
+        'section': section
       })
     })
     .done(function(result) {
@@ -40,6 +42,7 @@ jQuery(document).ready(function($) {
             var price_unit = product_info['price_unit']
           }
           _buffer.push('<tr>');
+          _buffer.push('<td>' + product_info['section'] + '</td>');
           _buffer.push('<td><a href="' + product_info['href'] + '">' + product_info['name'] + '</a></td>');
           _buffer.push('<td><a href="' + product_info['picture'] + '">' + '图片链接</a></td>');
           _buffer.push('<td>' + product_info['create_date'] + '</td>');

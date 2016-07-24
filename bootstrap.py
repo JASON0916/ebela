@@ -10,6 +10,7 @@ meta = MetaData()
 
 EbayProduct = Table('ebay_product', meta,
                     Column('id', Integer, autoincrement=True, primary_key=True),
+                    Column('section', String(100), default=''),
                     Column('name', String(100), nullable=False, default=''),
                     Column('picture', String(200), default=''),
                     Column('create_date', String(20), nullable=False, default=''),

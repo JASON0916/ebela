@@ -21,4 +21,4 @@ app = create_app()
 def index(page):
     return render_template('html/{}.html'.format(page))
 
-app.run(debug=True)
+# app.run(debug=True)

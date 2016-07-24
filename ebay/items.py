@@ -9,6 +9,7 @@ import scrapy
 
 
 class EbayProduct(scrapy.Item):
+    section = scrapy.Field()
     name = scrapy.Field()
     picture = scrapy.Field()
     create_date = scrapy.Field()

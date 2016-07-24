@@ -17,6 +17,7 @@ LOGGER = getLogger(__file__)
 @use_args({
     'name': fields.Str(allow_missing=True),
     'seller': fields.Str(allow_missing=True),
+    'section': fields.Str(allow_missing=True),
     'start_date': fields.Str(required=True),
     'end_date': fields.Str(required=True)
 })

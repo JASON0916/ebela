@@ -14,6 +14,7 @@ class EbayProduct(meta):
     __tablename__ = 'ebay_product'
 
     id = Column(Integer, autoincrement=True, primary_key=True)
+    section = Column(String(100))
     name = Column(String(100), nullable=False, default='')
     picture = Column(String(200), default='')
     create_date = Column(String, default='')
@@ -28,12 +29,14 @@ class EbayProduct(meta):
                         onupdate=datetime.datetime.now)
 
     @classmethod
-    def get(cls, name='', seller='', start_date='', end_date=''):
+    def get(cls, name='', seller='', start_date='', end_date='', section=''):
         query = DBSession().query(cls)
         if name:
             query = query.filter(cls.name.like('%{}%'.format(name)))
         if seller:
             query = query.filter(cls.seller.like('%{}%'.format(seller)))
+        if section:
+            query = query.filter(cls.seller.like('%{}%'.format(section)))
         if start_date and end_date:
             start_date = datetime.datetime.strptime(start_date, '%Y-%m-%d')
             end_date = datetime.datetime.strptime(end_date, '%Y-%m-%d')
